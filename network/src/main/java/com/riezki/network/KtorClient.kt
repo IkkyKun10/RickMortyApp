@@ -1,6 +1,11 @@
 package com.riezki.network
 
-import com.riezki.network.model.Character
+import com.riezki.network.model.domain.Character
+import com.riezki.network.model.domain.Episode
+import com.riezki.network.model.remote.CharacterDTO
+import com.riezki.network.model.remote.EpisodeDTO
+import com.riezki.network.model.remote.EpisodeItemDTO
+import com.riezki.network.model.utils.ApiOperation
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -10,11 +15,7 @@ import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.retry
 import io.ktor.client.request.get
-import io.ktor.client.statement.request
-import io.ktor.http.headers
-import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -40,7 +41,42 @@ class KtorClient() {
         }
     }
 
-    private suspend fun getCharacter(id: Int) : Character {
+    private var characterChache = mutableMapOf<Int, Character>()
+
+    suspend fun getCharacter(id: Int) : ApiOperation<Character> {
+        characterChache[id]?.let { return ApiOperation.Success(it) }
         return client.get("character/$id").body()
     }
+
+    suspend fun getEpisode(episodeId: Int) : ApiOperation<Episode> {
+        return safeApiCall {
+            client.get("episode/$episodeId")
+                .body<EpisodeItemDTO>()
+                .toEpisodeDomain()
+        }
+    }
+
+    suspend fun getEpisodes(episodeIds: List<Int>) : ApiOperation<List<Episode>> {
+        return if (episodeIds.size == 1) {
+            getEpisode(episodeIds[0]).mapSuccess {
+                listOf(it)
+            }
+        } else {
+            val idsCommaSeparated = episodeIds.joinToString(separator = ",")
+            safeApiCall {
+                client.get("episode/$idsCommaSeparated")
+                    .body<EpisodeDTO>().results
+                    ?.map { it.toEpisodeDomain() } ?: emptyList()
+            }
+        }
+    }
+
+    private inline fun <T> safeApiCall(block: () -> T): ApiOperation<T> {
+        return try {
+            ApiOperation.Success(block())
+        } catch (e: Exception) {
+            ApiOperation.Failure(e)
+        }
+    }
+
 }
