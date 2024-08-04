@@ -1,8 +1,10 @@
 package com.riezki.network
 
 import com.riezki.network.model.domain.Character
+import com.riezki.network.model.domain.CharacterPage
 import com.riezki.network.model.domain.Episode
 import com.riezki.network.model.remote.CharacterDTO
+import com.riezki.network.model.remote.CharacterPageDTO
 import com.riezki.network.model.remote.EpisodeDTO
 import com.riezki.network.model.remote.EpisodeItemDTO
 import com.riezki.network.model.utils.ApiOperation
@@ -43,12 +45,24 @@ class KtorClient() {
 
     private var characterChache = mutableMapOf<Int, Character>()
 
-    suspend fun getCharacter(id: Int) : ApiOperation<Character> {
+    suspend fun getCharacter(id: Int): ApiOperation<Character> {
         characterChache[id]?.let { return ApiOperation.Success(it) }
-        return client.get("character/$id").body()
+        return safeApiCall {
+            client.get("character/$id")
+                .body<CharacterDTO>()
+                .toDomainCharacter()
+        }
     }
 
-    suspend fun getEpisode(episodeId: Int) : ApiOperation<Episode> {
+    suspend fun getCharacterByPage(pageNumber: Int) : ApiOperation<CharacterPage> {
+        return safeApiCall {
+            client.get("character/?page=$pageNumber")
+                .body<CharacterPageDTO>()
+                .toDomainCharacterPage()
+        }
+    }
+
+    suspend fun getEpisode(episodeId: Int): ApiOperation<Episode> {
         return safeApiCall {
             client.get("episode/$episodeId")
                 .body<EpisodeItemDTO>()
@@ -56,7 +70,7 @@ class KtorClient() {
         }
     }
 
-    suspend fun getEpisodes(episodeIds: List<Int>) : ApiOperation<List<Episode>> {
+    suspend fun getEpisodes(episodeIds: List<Int>): ApiOperation<List<Episode>> {
         return if (episodeIds.size == 1) {
             getEpisode(episodeIds[0]).mapSuccess {
                 listOf(it)

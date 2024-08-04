@@ -61,7 +61,7 @@ data class CharacterDTO(
 
         return Character(
             created = created,
-            episodeIds = episode?.map { it?.substring(it.lastIndexOf("/") + 1)?.toInt() },
+            episodeIds = episode?.map { it?.substring(it.lastIndexOf("/") + 1)?.toInt() ?: 0 },
             gender = characterGender,
             id = id,
             imageUrl = image,

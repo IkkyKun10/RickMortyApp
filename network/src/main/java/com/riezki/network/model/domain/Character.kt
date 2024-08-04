@@ -2,7 +2,7 @@ package com.riezki.network.model.domain
 
 data class Character(
     val created: String?,
-    val episodeIds: List<Int?>? = null,
+    val episodeIds: List<Int>? = null,
     val gender: CharacterGender,
     val id: Int?,
     val imageUrl: String?,
