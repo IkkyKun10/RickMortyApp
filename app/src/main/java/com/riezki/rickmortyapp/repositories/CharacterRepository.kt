@@ -4,13 +4,12 @@ import com.riezki.network.KtorClient
 import com.riezki.network.model.domain.Character
 import com.riezki.network.model.domain.CharacterPage
 import com.riezki.network.model.utils.ApiOperation
-import javax.inject.Inject
 
 /**
  * @author riezky maisyar
  */
 
-class CharacterRepository @Inject constructor(
+class CharacterRepository(
     private val ktorClient: KtorClient
 ) {
     suspend fun fetchCharacterPage(page: Int) : ApiOperation<CharacterPage> {

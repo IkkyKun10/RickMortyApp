@@ -1,6 +1,7 @@
 package com.riezki.rickmortyapp.di
 
 import com.riezki.network.KtorClient
+import com.riezki.rickmortyapp.repositories.CharacterRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +16,11 @@ class NetworkModule {
     @Singleton
     fun providesKtorClient() : KtorClient {
         return KtorClient()
+    }
+
+    @Provides
+    @Singleton
+    fun providesCharacterRepository(ktorClient: KtorClient) : CharacterRepository {
+        return CharacterRepository(ktorClient)
     }
 }

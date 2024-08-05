@@ -18,16 +18,12 @@ sealed interface ApiOperation<T> {
     }
 
     fun onSuccess(block: (T) -> Unit) : ApiOperation<T> {
-        if (this is Success) {
-            block(data)
-        }
+        if (this is Success) block(data)
         return this
     }
 
     fun onFailure(block: (Exception) -> Unit) : ApiOperation<T> {
-        if (this is Failure) {
-            block(exception)
-        }
+        if (this is Failure) block(exception)
         return this
     }
 }

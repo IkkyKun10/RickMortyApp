@@ -7,8 +7,8 @@ import androidx.compose.ui.graphics.Color
  */
 
 sealed class CharacterGender(val gender: String) {
-    object Male : CharacterGender("Male")
-    object Female : CharacterGender("Female")
-    object Genderless : CharacterGender("No gender")
-    object Unknown : CharacterGender("Not specified")
+    data object Male : CharacterGender("Male")
+    data object Female : CharacterGender("Female")
+    data object Genderless : CharacterGender("No gender")
+    data object Unknown : CharacterGender("Not specified")
 }
