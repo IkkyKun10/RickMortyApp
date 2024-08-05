@@ -91,7 +91,8 @@ class MainActivity : ComponentActivity() {
                                         selectedIconColor = RickAction,
                                         selectedTextColor = RickAction,
                                         indicatorColor = Color.Transparent
-                                    )
+                                    ),
+                                    label = { Text(text = screen.title) }
                                 )
                             }
                         }
@@ -116,14 +117,14 @@ fun NavigationHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavDestination.Home.route,
+        startDestination = "home_screen",
         modifier = Modifier
             .background(color = RickPrimary)
             .padding(innerPaddingValues)
     ) {
-        composable(route = NavDestination.Home.route) {
+        composable(route = "home_screen") {
             HomeScreens { characterId ->
-                navController.navigate("character_detail/$characterId")
+                navController.navigate("character_details/$characterId")
             }
         }
         composable(

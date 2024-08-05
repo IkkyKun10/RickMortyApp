@@ -1,6 +1,5 @@
 package com.riezki.rickmortyapp.component.character
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -37,7 +36,7 @@ fun CharacterGridItem(
     onClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .border(
                 width = 1.dp,
                 brush = Brush.verticalGradient(listOf(Color.Transparent, RickAction)),

@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.riezki.rickmortyapp.component.character.CharacterGridItem
@@ -28,13 +29,11 @@ import com.riezki.rickmortyapp.presenter.viewmodels.HomeScreenViewModel
 @Composable
 fun HomeScreens(
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    onCharacterSelected: (Int) -> Unit
+    onCharacterSelected: (Int) -> Unit,
 ) {
-    val viewState by viewModel.stateFlow.collectAsState()
+    val viewState by viewModel.viewState.collectAsState()
 
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.fetchInitialPage()
-    }
+    LaunchedEffect(key1 = viewModel, block = { viewModel.fetchInitialPage() })
 
     val scrollState = rememberLazyGridState()
     val fetchNextPage: Boolean by remember {
@@ -48,9 +47,9 @@ fun HomeScreens(
         }
     }
 
-    LaunchedEffect(key1 = fetchNextPage) {
+    LaunchedEffect(key1 = fetchNextPage, block = {
         if (fetchNextPage) viewModel.fetchNextPage()
-    }
+    })
 
     when (val state = viewState) {
         HomeScreenViewState.Loading -> LoadingState()
@@ -64,8 +63,14 @@ fun HomeScreens(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     content = {
-                        items(state.characters ?: emptyList(), key = { it.id ?: 1 }) { character ->
-                            CharacterGridItem(character = character) {
+                        items(
+                            state.characters ?: emptyList(),
+                            key = { it.id!! }
+                        ) { character ->
+                            CharacterGridItem(
+                                modifier = Modifier,
+                                character = character
+                            ) {
                                 character.id?.let { onCharacterSelected(it) }
                             }
                         }

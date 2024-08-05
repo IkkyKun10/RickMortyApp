@@ -22,7 +22,7 @@ class HomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow<HomeScreenViewState>(HomeScreenViewState.Loading)
-    val stateFlow = _viewState.asStateFlow()
+    val viewState = _viewState.asStateFlow()
 
     private val fetchCharacterPages = mutableListOf<CharacterPage>()
 

@@ -8,6 +8,7 @@ import com.riezki.network.model.domain.Origin
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Serializable
 data class CharacterDTO(
     @SerialName("created")
     val created: String?,

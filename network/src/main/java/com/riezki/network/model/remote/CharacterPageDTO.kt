@@ -4,6 +4,7 @@ import com.riezki.network.model.domain.CharacterPage
 import kotlinx.serialization.Serializable
 import com.riezki.network.model.domain.Info
 
+@Serializable
 data class CharacterPageDTO(
     val info: InfoDTO?,
     val results: List<CharacterDTO>?

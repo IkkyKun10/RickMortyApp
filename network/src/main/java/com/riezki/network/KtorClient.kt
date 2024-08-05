@@ -13,10 +13,12 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.ANDROID
 import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -30,15 +32,15 @@ class KtorClient() {
         defaultRequest { url("https://rickandmortyapi.com/api/") }
 
         install(Logging) {
-            logger = Logger.DEFAULT
+            logger = Logger.SIMPLE
             level = LogLevel.ALL
         }
 
         install(ContentNegotiation) {
             json(Json {
+                ignoreUnknownKeys = true
                 prettyPrint = true
                 isLenient = true
-                ignoreUnknownKeys = true
             })
         }
     }
@@ -51,6 +53,7 @@ class KtorClient() {
             client.get("character/$id")
                 .body<CharacterDTO>()
                 .toDomainCharacter()
+                .also { characterCache[0] = it }
         }
     }
 
