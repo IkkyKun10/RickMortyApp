@@ -13,8 +13,6 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.ANDROID
-import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
@@ -27,7 +25,7 @@ import kotlinx.serialization.json.Json
  * @author riezky maisyar
  */
 
-class KtorClient() {
+class KtorClient {
     private val client = HttpClient(OkHttp) {
         defaultRequest { url("https://rickandmortyapi.com/api/") }
 
@@ -82,8 +80,8 @@ class KtorClient() {
             val idsCommaSeparated = episodeIds.joinToString(separator = ",")
             safeApiCall {
                 client.get("episode/$idsCommaSeparated")
-                    .body<EpisodeDTO>().results
-                    ?.map { it.toEpisodeDomain() } ?: emptyList()
+                    .body<List<EpisodeItemDTO>>()
+                    .map { it.toEpisodeDomain() } ?: emptyList()
             }
         }
     }

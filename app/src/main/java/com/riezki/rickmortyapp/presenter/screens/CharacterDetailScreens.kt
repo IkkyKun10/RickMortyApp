@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.riezki.rickmortyapp.component.character.CharacterDetailsNamePlateComponent
+import com.riezki.rickmortyapp.component.common.CharacterImage
 import com.riezki.rickmortyapp.component.common.DataPointComponent
 import com.riezki.rickmortyapp.component.common.LoadingState
 import com.riezki.rickmortyapp.component.common.SimpleToolbar
@@ -70,6 +71,10 @@ fun CharacterDetailsScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                     }
 
+                    item {
+                        CharacterImage(imageUrl = viewState.character.imageUrl.toString())
+                    }
+
                     items(viewState.characterDataPoints) {
                         Spacer(modifier = Modifier.height(32.dp))
                         DataPointComponent(dataPoint = it)
@@ -84,9 +89,7 @@ fun CharacterDetailsScreen(
                             fontSize = 18.sp,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .padding(
-                                    horizontal = 32.dp
-                                )
+                                .padding(horizontal = 32.dp)
                                 .border(
                                     width = 1.dp,
                                     shape = RoundedCornerShape(12.dp),

@@ -95,6 +95,7 @@ fun CharacterEpisodeScreen(
                         ktorClient.getEpisodes(it)
                             .onSuccess { episodes ->
                                 episodesState = episodes
+                                println("episodesState: \n$episodesState")
                             }
                             .onFailure {
 
@@ -126,9 +127,7 @@ fun MainScreen(
             title = "Character Episode",
             onBackAction = onBackClicked
         )
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp)
-        ) {
+        LazyColumn(contentPadding = PaddingValues(16.dp)) {
             item { CharacterNameComponent(name = character.name.toString()) }
             item { Spacer(modifier = Modifier.height(8.dp)) }
             item {
@@ -148,7 +147,7 @@ fun MainScreen(
             item { Spacer(modifier = Modifier.height(32.dp)) }
 
             episodeBySeasonMap.forEach { mapEntry ->
-                stickyHeader { SeasonHeader(seasonNumber = mapEntry.key as Int) }
+                stickyHeader { SeasonHeader(seasonNumber = mapEntry.key ?: 1) }
                 item { Spacer(modifier = Modifier.height(16.dp)) }
                 items(mapEntry.value) { episode ->
                     EpisodeRowComponent(episode = episode)
