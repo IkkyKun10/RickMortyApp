@@ -5,7 +5,6 @@ import com.riezki.network.model.domain.CharacterPage
 import com.riezki.network.model.domain.Episode
 import com.riezki.network.model.remote.CharacterDTO
 import com.riezki.network.model.remote.CharacterPageDTO
-import com.riezki.network.model.remote.EpisodeDTO
 import com.riezki.network.model.remote.EpisodeItemDTO
 import com.riezki.network.model.utils.ApiOperation
 import io.ktor.client.HttpClient

@@ -3,10 +3,10 @@ package com.riezki.rickmortyapp.presenter.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,7 +35,7 @@ fun HomeScreens(
 
     LaunchedEffect(key1 = viewModel, block = { viewModel.fetchInitialPage() })
 
-    val scrollState = rememberLazyGridState()
+    val scrollState = rememberLazyStaggeredGridState()
     val fetchNextPage: Boolean by remember {
         derivedStateOf {
             val currentCharacterCount =
@@ -56,11 +56,11 @@ fun HomeScreens(
         is HomeScreenViewState.GridDisplay -> {
             Column {
                 SimpleToolbar(title = "All Characters")
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(2),
                     state = scrollState,
                     contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalItemSpacing = 4.dp,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     content = {
                         items(
